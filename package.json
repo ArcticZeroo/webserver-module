@@ -1,0 +1,27 @@
+{
+  "name": "@arcticzeroo/webserver-module",
+  "version": "1.0.0",
+  "description": "Common webserver module interface",
+  "main": "WebserverModule.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arcticzeroo/webserver-module.git"
+  },
+  "author": "spencer@frozor.io",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arcticzeroo/webserver-module/issues"
+  },
+  "homepage": "https://github.com/arcticzeroo/webserver-module#readme",
+  "devDependencies": {
+    "@arcticzeroo/eslint-config": "^1.0.5",
+    "eslint": "^4.19.1"
+  },
+  "dependencies": {
+    "frozor-logger": "^3.0.13",
+    "@arcticzeroo/djs-collection": "latest"
+  }
+}
