@@ -72,7 +72,7 @@ class WebserverModule extends EventEmitter {
                 // Load props from this, set name to null so that it gets its name from constructor
                 // if data is provided, and load data last so it can override anything we've provided
                 // already.
-                otherModule = new otherModule({ ...this, name: null, ...data });
+                otherModule = new otherModule({ loaderModule: this, ...this, name: null, ...data });
             } else {
                 throw new TypeError(`Invalid type given for module loading: ${typeof otherModule}`);
             }
@@ -83,7 +83,10 @@ class WebserverModule extends EventEmitter {
             }
         }
 
+        otherModule.parent = this;
+
         this.children.set(otherModule.name, otherModule);
+
         return otherModule;
     }
 
