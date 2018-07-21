@@ -32,7 +32,7 @@ class WebserverModule extends EventEmitter {
     constructor({ db, app, startByDefault = true, name }) {
         super();
 
-        this._name = name ? name.toLowerCase() : null;
+        this._name = name;
         this.db = db;
         this.app = app;
         this.startByDefault = startByDefault;
