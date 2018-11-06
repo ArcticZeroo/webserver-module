@@ -2,7 +2,7 @@
   "name": "@arcticzeroo/webserver-module",
   "version": "1.0.2",
   "description": "Common webserver module interface",
-  "main": "WebserverModule.js",
+  "main": "WebserverModule.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,10 +18,13 @@
   "homepage": "https://github.com/arcticzeroo/webserver-module#readme",
   "devDependencies": {
     "@arcticzeroo/eslint-config": "^1.0.5",
+    "@types/node": "^10.12.2",
     "eslint": "^4.19.1"
   },
   "dependencies": {
-    "frozor-logger": "^3.0.13",
-    "@arcticzeroo/djs-collection": "latest"
+    "@arcticzeroo/djs-collection": "latest",
+    "@types/express": "^4.16.0",
+    "@types/mongoose": "^5.3.1",
+    "frozor-logger": "^3.0.13"
   }
 }
