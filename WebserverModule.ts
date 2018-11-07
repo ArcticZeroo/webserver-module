@@ -72,9 +72,9 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {object} [data] - Data to load into this child. By default all props from 'this' are passed, excluding name.
      * @return {*} the child that was loaded
      */
-    loadChild(otherModule: WebserverModule, data: {});
-    loadChild(otherModule: new (data: {}) => WebserverModule, data: {})
-    loadChild(otherModule, data): WebserverModule {
+    loadChild(otherModule: WebserverModule, data?: {});
+    loadChild(otherModule: new (data?: {}) => WebserverModule, data?: {})
+    loadChild(otherModule: any, data: any = {}): WebserverModule {
         if (!(otherModule instanceof WebserverModule)) {
             // Assume this is a class that can be
             // newly constructed if it's a function

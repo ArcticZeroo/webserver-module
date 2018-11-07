@@ -53,7 +53,7 @@ class WebserverModule extends EventEmitter {
     get name() {
         return this._name || this.constructor.name;
     }
-    loadChild(otherModule, data) {
+    loadChild(otherModule, data = {}) {
         if (!(otherModule instanceof WebserverModule)) {
             // Assume this is a class that can be
             // newly constructed if it's a function
