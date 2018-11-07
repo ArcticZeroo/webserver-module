@@ -1,11 +1,12 @@
 import * as EventEmitter from 'events';
 import * as Collection from '@arcticzeroo/djs-collection';
 import * as Logger from 'frozor-logger';
+import { Application, Router } from 'express';
 
 export default abstract class WebserverModule extends EventEmitter {
     private readonly _name: string;
     public db;
-    public app: Express.Application;
+    public app: Application & Router;
     public startByDefault: boolean;
     public log: Logger;
     public children: Collection;
