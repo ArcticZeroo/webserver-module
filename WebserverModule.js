@@ -53,12 +53,6 @@ class WebserverModule extends EventEmitter {
     get name() {
         return this._name || this.constructor.name;
     }
-    /**
-     * Load a child module into this module's children.
-     * @param otherModule
-     * @param {object} [data] - Data to load into this child. By default all props from 'this' are passed, excluding name.
-     * @return {*} the child that was loaded
-     */
     loadChild(otherModule, data) {
         if (!(otherModule instanceof WebserverModule)) {
             // Assume this is a class that can be
