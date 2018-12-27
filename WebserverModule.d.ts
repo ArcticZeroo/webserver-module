@@ -1,11 +1,15 @@
 /// <reference types="node" />
-/// <reference types="mongoose" />
-/// <reference types="express" />
 import * as EventEmitter from 'events';
 import * as Collection from '@arcticzeroo/djs-collection';
 import * as Logger from 'frozor-logger';
 import { Application, Router } from 'express';
 import { Connection } from 'mongoose';
+export interface IWebserverModuleParams {
+    db?: Connection;
+    app: Router & Application;
+    startByDefault?: boolean;
+    name?: string;
+}
 export default abstract class WebserverModule extends EventEmitter {
     private readonly _name;
     db: Connection;
@@ -38,12 +42,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {boolean} startByDefault - Whether this module should start listening without additional method calls, default true
      * @param {string} name - The name of this module. Not required. The logger will use this name if you give it one.
      */
-    protected constructor({db, app, startByDefault, name}: {
-        db?: Connection;
-        app: Router & Application;
-        startByDefault?: boolean;
-        name?: string;
-    });
+    protected constructor({ db, app, startByDefault, name }: IWebserverModuleParams);
     /**
      * Get this instance's name. If the name was set
      * on instantiation or with .name's setter, this

@@ -4,6 +4,13 @@ import * as Logger from 'frozor-logger';
 import { Application, Router } from 'express';
 import { Connection } from 'mongoose';
 
+export interface IWebserverModuleParams {
+    db?: Connection;
+    app: Router & Application;
+    startByDefault?: boolean;
+    name?: string;
+}
+
 export default abstract class WebserverModule extends EventEmitter {
     private readonly _name: string;
     public db: Connection;
@@ -37,7 +44,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {boolean} startByDefault - Whether this module should start listening without additional method calls, default true
      * @param {string} name - The name of this module. Not required. The logger will use this name if you give it one.
      */
-    protected constructor({ db, app, startByDefault = true, name } : { db?: Connection, app: Router & Application, startByDefault?: boolean, name?: string }) {
+    protected constructor({ db, app, startByDefault = true, name } : IWebserverModuleParams) {
         super();
 
         this._name = name;
