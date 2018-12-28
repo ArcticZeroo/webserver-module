@@ -1,6 +1,6 @@
 import * as EventEmitter from 'events';
-import * as Collection from '@arcticzeroo/collection';
 import * as Logger from 'frozor-logger';
+import Collection from '@arcticzeroo/collection';
 import { Application, Router } from 'express';
 import { Connection } from 'mongoose';
 
@@ -17,7 +17,7 @@ export default abstract class WebserverModule extends EventEmitter {
     public app: Application & Router;
     public startByDefault: boolean;
     public log: Logger;
-    public children: Collection;
+    public children: Collection<string, WebserverModule>;
     public parent?: WebserverModule;
 
     /**

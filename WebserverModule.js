@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const EventEmitter = require("events");
-const Collection = require("@arcticzeroo/collection");
 const Logger = require("frozor-logger");
+const collection_1 = require("@arcticzeroo/collection");
 class WebserverModule extends EventEmitter {
     /**
      * Creates a new instance of a Webserver Module.
@@ -35,7 +35,7 @@ class WebserverModule extends EventEmitter {
         this.app = app;
         this.startByDefault = startByDefault;
         this.log = new Logger(this.name);
-        this.children = new Collection();
+        this.children = new collection_1.default();
         if (startByDefault) {
             this.start();
         }
