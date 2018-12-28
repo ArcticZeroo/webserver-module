@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const EventEmitter = require("events");
-const Collection = require("@arcticzeroo/djs-collection");
+const Collection = require("@arcticzeroo/collection");
 const Logger = require("frozor-logger");
 class WebserverModule extends EventEmitter {
     /**

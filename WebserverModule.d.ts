@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import * as EventEmitter from 'events';
-import * as Collection from '@arcticzeroo/djs-collection';
+import * as Collection from '@arcticzeroo/collection';
 import * as Logger from 'frozor-logger';
 import { Application, Router } from 'express';
 import { Connection } from 'mongoose';
