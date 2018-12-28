@@ -1,6 +1,6 @@
 {
   "name": "@arcticzeroo/webserver-module",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Common webserver module interface",
   "main": "index.js",
   "scripts": {
