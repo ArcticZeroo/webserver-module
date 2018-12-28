@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const EventEmitter = require("events");
 const Logger = require("frozor-logger");
 const collection_1 = require("@arcticzeroo/collection");
+const express = require("express");
 class WebserverModule extends EventEmitter {
     /**
      * Creates a new instance of a Webserver Module.
@@ -27,15 +28,26 @@ class WebserverModule extends EventEmitter {
      * @param {object} app - An instance of an express app
      * @param {boolean} startByDefault - Whether this module should start listening without additional method calls, default true
      * @param {string} name - The name of this module. Not required. The logger will use this name if you give it one.
+     * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
      */
-    constructor({ db, app, startByDefault = true, name }) {
+    constructor({ db, app, startByDefault = true, name, routerPath, loaderModule }) {
         super();
         this._name = name;
         this.db = db;
-        this.app = app;
         this.startByDefault = startByDefault;
         this.log = new Logger(this.name);
         this.children = new collection_1.default();
+        if (routerPath) {
+            const router = express.Router();
+            app.use(routerPath, router);
+            this.app = router;
+        }
+        else {
+            this.app = app;
+        }
+        if (loaderModule) {
+            this.parent = loaderModule;
+        }
         if (startByDefault) {
             this.start();
         }
@@ -61,7 +73,6 @@ class WebserverModule extends EventEmitter {
                 // Load props from this, set name to null so that it gets its name from constructor
                 // if data is provided, and load data last so it can override anything we've provided
                 // already.
-                // @ts-ignore
                 otherModule = new otherModule(Object.assign({ loaderModule: this }, this, { name: null }, data));
             }
             else {

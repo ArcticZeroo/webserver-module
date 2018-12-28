@@ -1,20 +1,23 @@
 import * as EventEmitter from 'events';
 import * as Logger from 'frozor-logger';
 import Collection from '@arcticzeroo/collection';
-import { Application, Router } from 'express';
+import { Router } from 'express';
 import { Connection } from 'mongoose';
+import express = require('express');
 
 export interface IWebserverModuleParams {
     db?: Connection;
-    app: Router & Application;
+    app?: Router;
     startByDefault?: boolean;
     name?: string;
+    loaderModule?: WebserverModule;
+    routerPath?: string;
 }
 
 export default abstract class WebserverModule extends EventEmitter {
     private readonly _name: string;
     public db: Connection;
-    public app: Application & Router;
+    public app: Router;
     public startByDefault: boolean;
     public log: Logger;
     public children: Collection<string, WebserverModule>;
@@ -43,16 +46,28 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {object} app - An instance of an express app
      * @param {boolean} startByDefault - Whether this module should start listening without additional method calls, default true
      * @param {string} name - The name of this module. Not required. The logger will use this name if you give it one.
+     * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
      */
-    protected constructor({ db, app, startByDefault = true, name } : IWebserverModuleParams) {
+    protected constructor({ db, app, startByDefault = true, name, routerPath, loaderModule } : IWebserverModuleParams) {
         super();
 
         this._name = name;
         this.db = db;
-        this.app = app;
         this.startByDefault = startByDefault;
         this.log = new Logger(this.name);
         this.children = new Collection();
+
+        if (routerPath) {
+            const router = express.Router();
+            app.use(routerPath, router);
+            this.app = router;
+        } else {
+            this.app = app;
+        }
+
+        if (loaderModule) {
+            this.parent = loaderModule;
+        }
 
         if (startByDefault) {
             this.start();
@@ -80,8 +95,8 @@ export default abstract class WebserverModule extends EventEmitter {
      * @return {*} the child that was loaded
      */
     loadChild(otherModule: WebserverModule, data?: {});
-    loadChild(otherModule: new (data?: {}) => WebserverModule, data?: {})
-    loadChild(otherModule: any, data: any = {}): WebserverModule {
+    loadChild(otherModule: new (data?: IWebserverModuleParams) => WebserverModule, data?: {})
+    loadChild(otherModule: any, data: IWebserverModuleParams = {}): WebserverModule {
         if (!(otherModule instanceof WebserverModule)) {
             // Assume this is a class that can be
             // newly constructed if it's a function
@@ -89,7 +104,6 @@ export default abstract class WebserverModule extends EventEmitter {
                 // Load props from this, set name to null so that it gets its name from constructor
                 // if data is provided, and load data last so it can override anything we've provided
                 // already.
-                // @ts-ignore
                 otherModule = new otherModule({ loaderModule: this, ...this, name: null, ...data });
             } else {
                 throw new TypeError(`Invalid type given for module loading: ${typeof otherModule}`);

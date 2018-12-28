@@ -2,18 +2,20 @@
 import * as EventEmitter from 'events';
 import * as Logger from 'frozor-logger';
 import Collection from '@arcticzeroo/collection';
-import { Application, Router } from 'express';
+import { Router } from 'express';
 import { Connection } from 'mongoose';
 export interface IWebserverModuleParams {
     db?: Connection;
-    app: Router & Application;
+    app?: Router;
     startByDefault?: boolean;
     name?: string;
+    loaderModule?: WebserverModule;
+    routerPath?: string;
 }
 export default abstract class WebserverModule extends EventEmitter {
     private readonly _name;
     db: Connection;
-    app: Application & Router;
+    app: Router;
     startByDefault: boolean;
     log: Logger;
     children: Collection<string, WebserverModule>;
@@ -41,8 +43,9 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {object} app - An instance of an express app
      * @param {boolean} startByDefault - Whether this module should start listening without additional method calls, default true
      * @param {string} name - The name of this module. Not required. The logger will use this name if you give it one.
+     * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
      */
-    protected constructor({ db, app, startByDefault, name }: IWebserverModuleParams);
+    protected constructor({ db, app, startByDefault, name, routerPath, loaderModule }: IWebserverModuleParams);
     /**
      * Get this instance's name. If the name was set
      * on instantiation or with .name's setter, this
@@ -61,7 +64,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @return {*} the child that was loaded
      */
     loadChild(otherModule: WebserverModule, data?: {}): any;
-    loadChild(otherModule: new (data?: {}) => WebserverModule, data?: {}): any;
+    loadChild(otherModule: new (data?: IWebserverModuleParams) => WebserverModule, data?: {}): any;
     /**
      * This method is to be called when the module is
      * supposed to start listening. By default it is
