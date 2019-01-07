@@ -1,5 +1,5 @@
 import * as EventEmitter from 'events';
-import * as Logger from 'frozor-logger';
+import Logger from 'frozor-logger';
 import Collection from '@arcticzeroo/collection';
 import { Router } from 'express';
 import { Connection } from 'mongoose';
@@ -47,6 +47,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {boolean} startByDefault - Whether this module should start listening without additional method calls, default true
      * @param {string} name - The name of this module. Not required. The logger will use this name if you give it one.
      * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
+     * @param {WebserverModule} loaderModule - The parent loading this module, if available
      */
     protected constructor({ db, app, startByDefault = true, name, routerPath, loaderModule } : IWebserverModuleParams) {
         super();
@@ -95,7 +96,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @return {*} the child that was loaded
      */
     loadChild(otherModule: WebserverModule, data?: {});
-    loadChild(otherModule: new (data?: IWebserverModuleParams) => WebserverModule, data?: {})
+    loadChild(otherModule: new (data: IWebserverModuleParams) => WebserverModule, data?: {})
     loadChild(otherModule: any, data: IWebserverModuleParams = {}): WebserverModule {
         if (!(otherModule instanceof WebserverModule)) {
             // Assume this is a class that can be

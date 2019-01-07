@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const EventEmitter = require("events");
-const Logger = require("frozor-logger");
+const frozor_logger_1 = require("frozor-logger");
 const collection_1 = require("@arcticzeroo/collection");
 const express = require("express");
 class WebserverModule extends EventEmitter {
@@ -29,13 +29,14 @@ class WebserverModule extends EventEmitter {
      * @param {boolean} startByDefault - Whether this module should start listening without additional method calls, default true
      * @param {string} name - The name of this module. Not required. The logger will use this name if you give it one.
      * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
+     * @param {WebserverModule} loaderModule - The parent loading this module, if available
      */
     constructor({ db, app, startByDefault = true, name, routerPath, loaderModule }) {
         super();
         this._name = name;
         this.db = db;
         this.startByDefault = startByDefault;
-        this.log = new Logger(this.name);
+        this.log = new frozor_logger_1.default(this.name);
         this.children = new collection_1.default();
         if (routerPath) {
             const router = express.Router();
