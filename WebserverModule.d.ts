@@ -46,7 +46,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
      * @param {WebserverModule} loaderModule - The parent loading this module, if available
      */
-    protected constructor({ db, app, startByDefault, name, routerPath, loaderModule }: IWebserverModuleParams);
+    constructor({ db, app, startByDefault, name, routerPath, loaderModule }: IWebserverModuleParams);
     /**
      * Get this instance's name. If the name was set
      * on instantiation or with .name's setter, this
