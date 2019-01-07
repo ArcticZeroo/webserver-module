@@ -2,7 +2,7 @@
   "name": "@arcticzeroo/webserver-module",
   "version": "1.3.1",
   "description": "Common webserver module interface",
-  "main": "index.js",
+  "main": "WebserverModule.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

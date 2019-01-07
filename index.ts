@@ -1,3 +1,4 @@
-import WebserverModule from './WebserverModule';
+import WebserverModule, { IWebserverModuleParams } from './WebserverModule';
 
+export { IWebserverModuleParams };
 export default WebserverModule;
