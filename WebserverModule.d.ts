@@ -1,20 +1,20 @@
 /// <reference types="node" />
-import * as EventEmitter from 'events';
+import EventEmitter from 'events';
 import Logger from 'frozor-logger';
 import Collection from '@arcticzeroo/collection';
 import { Router } from 'express';
 import { Connection } from 'mongoose';
 export interface IWebserverModuleParams {
     db?: Connection;
-    app?: Router;
+    app: Router;
     startByDefault?: boolean;
     name?: string;
     loaderModule?: WebserverModule;
     routerPath?: string;
 }
 export default abstract class WebserverModule extends EventEmitter {
-    private readonly _name;
-    db: Connection;
+    private readonly _name?;
+    db?: Connection;
     app: Router;
     startByDefault: boolean;
     log: Logger;
@@ -64,8 +64,8 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {object} [data] - Data to load into this child. By default all props from 'this' are passed, excluding name.
      * @return {*} the child that was loaded
      */
-    loadChild(otherModule: WebserverModule, data?: {}): any;
-    loadChild(otherModule: new (data: IWebserverModuleParams) => WebserverModule, data?: {}): any;
+    loadChild(otherModule: WebserverModule, data?: {}): WebserverModule;
+    loadChild(otherModule: new (data: IWebserverModuleParams) => WebserverModule, data?: {}): WebserverModule;
     /**
      * This method is to be called when the module is
      * supposed to start listening. By default it is

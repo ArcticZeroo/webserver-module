@@ -1,10 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const EventEmitter = require("events");
-const frozor_logger_1 = require("frozor-logger");
-const collection_1 = require("@arcticzeroo/collection");
+const events_1 = __importDefault(require("events"));
+const frozor_logger_1 = __importDefault(require("frozor-logger"));
+const collection_1 = __importDefault(require("@arcticzeroo/collection"));
 const express = require("express");
-class WebserverModule extends EventEmitter {
+class WebserverModule extends events_1.default {
     /**
      * Creates a new instance of a Webserver Module.
      * <p>

@@ -1,4 +1,4 @@
-import * as EventEmitter from 'events';
+import EventEmitter from 'events';
 import Logger from 'frozor-logger';
 import Collection from '@arcticzeroo/collection';
 import { Router } from 'express';
@@ -7,7 +7,7 @@ import express = require('express');
 
 export interface IWebserverModuleParams {
     db?: Connection;
-    app?: Router;
+    app: Router;
     startByDefault?: boolean;
     name?: string;
     loaderModule?: WebserverModule;
@@ -15,8 +15,8 @@ export interface IWebserverModuleParams {
 }
 
 export default abstract class WebserverModule extends EventEmitter {
-    private readonly _name: string;
-    public db: Connection;
+    private readonly _name?: string;
+    public db?: Connection;
     public app: Router;
     public startByDefault: boolean;
     public log: Logger;
@@ -95,8 +95,8 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {object} [data] - Data to load into this child. By default all props from 'this' are passed, excluding name.
      * @return {*} the child that was loaded
      */
-    loadChild(otherModule: WebserverModule, data?: {});
-    loadChild(otherModule: new (data: IWebserverModuleParams) => WebserverModule, data?: {})
+    loadChild(otherModule: WebserverModule, data?: {}): WebserverModule;
+    loadChild(otherModule: new (data: IWebserverModuleParams) => WebserverModule, data?: {}): WebserverModule;
     loadChild(otherModule: any, data: IWebserverModuleParams = {}): WebserverModule {
         if (!(otherModule instanceof WebserverModule)) {
             // Assume this is a class that can be
