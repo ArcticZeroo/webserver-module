@@ -28,7 +28,7 @@ class WebserverModule extends events_1.default {
      * <p>
      * Constructor properties are not in any order, they should be given as an object with the property names listed below.
      * @param {object} db - An instance of a db. I use mongodb for this, with fast-mongoose such that the db has all schemas on it as props.
-     * @param {object} app - An instance of an express app
+     * @param {object} app - An instance of an express app. Though it is not required in IWebserverModuleParams, it is required for the constructor
      * @param {boolean} startByDefault - Whether this module should start listening without additional method calls, default true
      * @param {string} name - The name of this module. Not required. The logger will use this name if you give it one.
      * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
@@ -69,6 +69,12 @@ class WebserverModule extends events_1.default {
     get name() {
         return this._name || this.constructor.name;
     }
+    /**
+     * Load a child module into this module's children.
+     * @param {WebserverModuleLike} otherModule - The constructor or instance of a webserver module to add to this parent
+     * @param [data] - Data to load into this child. By default all props from 'this' are passed, excluding name.
+     * @return {*} the child that was loaded
+     */
     loadChild(otherModule, data = {}) {
         if (!(otherModule instanceof WebserverModule)) {
             // Assume this is a class that can be
@@ -90,6 +96,9 @@ class WebserverModule extends events_1.default {
         otherModule.parent = this;
         this.children.set(otherModule.name, otherModule);
         return otherModule;
+    }
+    loadChildren(modules, data) {
+        return modules.map(module => this.loadChild(module, data));
     }
 }
 exports.default = WebserverModule;
