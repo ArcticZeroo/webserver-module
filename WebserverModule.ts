@@ -123,7 +123,7 @@ export default abstract class WebserverModule extends EventEmitter {
         return otherModule;
     }
 
-    loadChildren(modules: WebserverModuleLike[], data?: IWebserverModuleParams): WebserverModule[] {
+    loadChildren(modules: WebserverModuleLike[], data?: Partial<IWebserverModuleParams>): WebserverModule[] {
        return modules.map(module => this.loadChild(module, data));
     }
 

@@ -66,7 +66,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @return {*} the child that was loaded
      */
     loadChild(otherModule: WebserverModuleLike, data?: Partial<IWebserverModuleParams>): WebserverModule;
-    loadChildren(modules: WebserverModuleLike[], data?: IWebserverModuleParams): WebserverModule[];
+    loadChildren(modules: WebserverModuleLike[], data?: Partial<IWebserverModuleParams>): WebserverModule[];
     /**
      * This method is to be called when the module is
      * supposed to start listening. By default it is
