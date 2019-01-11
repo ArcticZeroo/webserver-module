@@ -7,7 +7,7 @@ import express = require('express');
 
 export interface IWebserverModuleParams {
     db?: Connection;
-    app?: Router;
+    app: Router;
     startByDefault?: boolean;
     name?: string;
     loaderModule?: WebserverModule;
@@ -51,7 +51,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
      * @param {WebserverModule} loaderModule - The parent loading this module, if available
      */
-    constructor({ db, app, startByDefault = true, name, routerPath, loaderModule } : IWebserverModuleParams & { app: Router }) {
+    constructor({ db, app, startByDefault = true, name, routerPath, loaderModule } : IWebserverModuleParams) {
         super();
 
         this._name = name;
@@ -97,7 +97,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param [data] - Data to load into this child. By default all props from 'this' are passed, excluding name.
      * @return {*} the child that was loaded
      */
-    loadChild(otherModule: WebserverModuleLike, data: IWebserverModuleParams = {}) {
+    loadChild(otherModule: WebserverModuleLike, data: Partial<IWebserverModuleParams> = {}) {
         if (!(otherModule instanceof WebserverModule)) {
             // Assume this is a class that can be
             // newly constructed if it's a function

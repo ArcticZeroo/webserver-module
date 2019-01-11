@@ -6,7 +6,7 @@ import { Router } from 'express';
 import { Connection } from 'mongoose';
 export interface IWebserverModuleParams {
     db?: Connection;
-    app?: Router;
+    app: Router;
     startByDefault?: boolean;
     name?: string;
     loaderModule?: WebserverModule;
@@ -47,9 +47,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
      * @param {WebserverModule} loaderModule - The parent loading this module, if available
      */
-    constructor({ db, app, startByDefault, name, routerPath, loaderModule }: IWebserverModuleParams & {
-        app: Router;
-    });
+    constructor({ db, app, startByDefault, name, routerPath, loaderModule }: IWebserverModuleParams);
     /**
      * Get this instance's name. If the name was set
      * on instantiation or with .name's setter, this
@@ -67,7 +65,7 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param [data] - Data to load into this child. By default all props from 'this' are passed, excluding name.
      * @return {*} the child that was loaded
      */
-    loadChild(otherModule: WebserverModuleLike, data?: IWebserverModuleParams): WebserverModule;
+    loadChild(otherModule: WebserverModuleLike, data?: Partial<IWebserverModuleParams>): WebserverModule;
     loadChildren(modules: WebserverModuleLike[], data?: IWebserverModuleParams): WebserverModule[];
     /**
      * This method is to be called when the module is
