@@ -3,9 +3,9 @@ import EventEmitter from 'events';
 import Logger from 'frozor-logger';
 import Collection from '@arcticzeroo/collection';
 import { Router } from 'express';
-import { Connection } from 'mongoose';
+import Database from 'fast-mongoose';
 export interface IWebserverModuleParams {
-    db?: Connection;
+    db?: Database;
     app: Router;
     startByDefault?: boolean;
     name?: string;
@@ -16,7 +16,7 @@ declare type WebserverModuleLike = WebserverModule | (new (data: IWebserverModul
 export default abstract class WebserverModule extends EventEmitter {
     private static readonly isWebserverModuleProperty;
     private readonly _name?;
-    db?: Connection;
+    db?: Database;
     app: Router;
     startByDefault: boolean;
     log: Logger;
