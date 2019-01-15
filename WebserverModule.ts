@@ -17,6 +17,7 @@ export interface IWebserverModuleParams {
 type WebserverModuleLike = WebserverModule | (new (data: IWebserverModuleParams) => WebserverModule);
 
 export default abstract class WebserverModule extends EventEmitter {
+    private static readonly isWebserverModuleProperty = '__webserverModule';
     private readonly _name?: string;
     public db?: Connection;
     public app: Router;
@@ -53,6 +54,8 @@ export default abstract class WebserverModule extends EventEmitter {
      */
     constructor({ db, app, startByDefault = true, name, routerPath, loaderModule } : IWebserverModuleParams) {
         super();
+
+        Object.defineProperty(this, WebserverModule.isWebserverModuleProperty, { value: true });
 
         this._name = name;
         this.db = db;
@@ -111,7 +114,7 @@ export default abstract class WebserverModule extends EventEmitter {
             }
 
             // Still not a webserver module instance
-            if (!(otherModule instanceof WebserverModule)) {
+            if (typeof otherModule[WebserverModule.isWebserverModuleProperty] === 'undefined' && !(otherModule instanceof WebserverModule)) {
                 throw new TypeError('Module given to load should be a WebserverModule.');
             }
         }

@@ -14,6 +14,7 @@ export interface IWebserverModuleParams {
 }
 declare type WebserverModuleLike = WebserverModule | (new (data: IWebserverModuleParams) => WebserverModule);
 export default abstract class WebserverModule extends EventEmitter {
+    private static readonly isWebserverModuleProperty;
     private readonly _name?;
     db?: Connection;
     app: Router;

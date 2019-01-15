@@ -36,6 +36,7 @@ class WebserverModule extends events_1.default {
      */
     constructor({ db, app, startByDefault = true, name, routerPath, loaderModule }) {
         super();
+        Object.defineProperty(this, WebserverModule.isWebserverModuleProperty, { value: true });
         this._name = name;
         this.db = db;
         this.startByDefault = startByDefault;
@@ -89,7 +90,7 @@ class WebserverModule extends events_1.default {
                 throw new TypeError(`Invalid type given for module loading: ${typeof otherModule}`);
             }
             // Still not a webserver module instance
-            if (!(otherModule instanceof WebserverModule)) {
+            if (typeof otherModule[WebserverModule.isWebserverModuleProperty] === 'undefined' && !(otherModule instanceof WebserverModule)) {
                 throw new TypeError('Module given to load should be a WebserverModule.');
             }
         }
@@ -101,5 +102,6 @@ class WebserverModule extends events_1.default {
         return modules.map(module => this.loadChild(module, data));
     }
 }
+WebserverModule.isWebserverModuleProperty = '__webserverModule';
 exports.default = WebserverModule;
 //# sourceMappingURL=WebserverModule.js.map
