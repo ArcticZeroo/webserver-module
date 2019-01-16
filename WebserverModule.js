@@ -26,17 +26,16 @@ class WebserverModule extends events_1.default {
      * export it. You SHOULD NOT instantiate it, this will be taken
      * care of entirely by the webserver itself.
      * <p>
-     * Constructor properties are not in any order, they should be given as an object with the property names listed below.
-     * @param {object} db - An instance of a db. I use mongodb for this, with fast-mongoose such that the db has all schemas on it as props.
-     * @param {object} app - An instance of an express app. Though it is not required in IWebserverModuleParams, it is required for the constructor
-     * @param {boolean} startByDefault - Whether this module should start listening without additional method calls, default true
-     * @param {string} name - The name of this module. Not required. The logger will use this name if you give it one.
-     * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
-     * @param {WebserverModule} loaderModule - The parent loading this module, if available
+     * @param {IWebserverModuleParams<T> & T>} data
      */
-    constructor({ db, app, startByDefault = true, name, routerPath, loaderModule }) {
+    constructor(data) {
         super();
         Object.defineProperty(this, WebserverModule.isWebserverModuleProperty, { value: true });
+        if (typeof data.startByDefault === 'undefined') {
+            data.startByDefault = true;
+        }
+        const { db, app, startByDefault, name, routerPath, loaderModule } = data;
+        this.data = data;
         this._name = name;
         this.db = db;
         this.startByDefault = startByDefault;
@@ -76,21 +75,23 @@ class WebserverModule extends events_1.default {
      * @param [data] - Data to load into this child. By default all props from 'this' are passed, excluding name.
      * @return {*} the child that was loaded
      */
+    // @ts-ignore - We don't care that the default value is not assignable to TChild because the data needs to be added
+    // if the module is not a generic of anything that's not {}...
     loadChild(otherModule, data = {}) {
-        if (!(otherModule instanceof WebserverModule)) {
+        if (!WebserverModule.isWebserverModule(otherModule)) {
             // Assume this is a class that can be
             // newly constructed if it's a function
             if (typeof otherModule === 'function') {
                 // Load props from this, set name to null so that it gets its name from constructor
                 // if data is provided, and load data last so it can override anything we've provided
                 // already.
-                otherModule = new otherModule(Object.assign({ loaderModule: this }, this, { name: null }, data));
+                otherModule = new otherModule(Object.assign({}, this.data, { loaderModule: this, name: null }, data));
             }
             else {
                 throw new TypeError(`Invalid type given for module loading: ${typeof otherModule}`);
             }
             // Still not a webserver module instance
-            if (typeof otherModule[WebserverModule.isWebserverModuleProperty] === 'undefined' && !(otherModule instanceof WebserverModule)) {
+            if (!WebserverModule.isWebserverModule(otherModule)) {
                 throw new TypeError('Module given to load should be a WebserverModule.');
             }
         }
@@ -100,6 +101,9 @@ class WebserverModule extends events_1.default {
     }
     loadChildren(modules, data) {
         return modules.map(module => this.loadChild(module, data));
+    }
+    static isWebserverModule(obj) {
+        return typeof obj[WebserverModule.isWebserverModuleProperty] !== 'undefined' || obj instanceof WebserverModule;
     }
 }
 WebserverModule.isWebserverModuleProperty = '__webserverModule';

@@ -12,8 +12,8 @@ export interface IWebserverModuleParams {
     loaderModule?: WebserverModule;
     routerPath?: string;
 }
-declare type WebserverModuleLike = WebserverModule | (new (data: IWebserverModuleParams) => WebserverModule);
-export default abstract class WebserverModule extends EventEmitter {
+declare type WebserverModuleLike<T> = WebserverModule<T> | (new (data: IWebserverModuleParams & T) => WebserverModule<T>);
+export default abstract class WebserverModule<T = {}> extends EventEmitter {
     private static readonly isWebserverModuleProperty;
     private readonly _name?;
     db?: Database;
@@ -22,6 +22,7 @@ export default abstract class WebserverModule extends EventEmitter {
     log: Logger;
     children: Collection<string, WebserverModule>;
     parent?: WebserverModule;
+    protected readonly data: IWebserverModuleParams & T;
     /**
      * Creates a new instance of a Webserver Module.
      * <p>
@@ -40,15 +41,9 @@ export default abstract class WebserverModule extends EventEmitter {
      * export it. You SHOULD NOT instantiate it, this will be taken
      * care of entirely by the webserver itself.
      * <p>
-     * Constructor properties are not in any order, they should be given as an object with the property names listed below.
-     * @param {object} db - An instance of a db. I use mongodb for this, with fast-mongoose such that the db has all schemas on it as props.
-     * @param {object} app - An instance of an express app. Though it is not required in IWebserverModuleParams, it is required for the constructor
-     * @param {boolean} startByDefault - Whether this module should start listening without additional method calls, default true
-     * @param {string} name - The name of this module. Not required. The logger will use this name if you give it one.
-     * @param {string} routerPath - The optional path for a router for this module. If this is passed, this.app will be a "scoped router" rather than a root level one
-     * @param {WebserverModule} loaderModule - The parent loading this module, if available
+     * @param {IWebserverModuleParams<T> & T>} data
      */
-    constructor({ db, app, startByDefault, name, routerPath, loaderModule }: IWebserverModuleParams);
+    constructor(data: IWebserverModuleParams & T);
     /**
      * Get this instance's name. If the name was set
      * on instantiation or with .name's setter, this
@@ -66,8 +61,8 @@ export default abstract class WebserverModule extends EventEmitter {
      * @param [data] - Data to load into this child. By default all props from 'this' are passed, excluding name.
      * @return {*} the child that was loaded
      */
-    loadChild(otherModule: WebserverModuleLike, data?: Partial<IWebserverModuleParams>): WebserverModule;
-    loadChildren(modules: WebserverModuleLike[], data?: Partial<IWebserverModuleParams>): WebserverModule[];
+    loadChild<TChild = {}>(otherModule: WebserverModuleLike<TChild>, data?: Partial<IWebserverModuleParams> & TChild): WebserverModule<TChild>;
+    loadChildren<TChild = {}>(modules: Array<WebserverModuleLike<TChild>>, data?: Partial<IWebserverModuleParams> & TChild): WebserverModule<TChild>[];
     /**
      * This method is to be called when the module is
      * supposed to start listening. By default it is
@@ -78,5 +73,6 @@ export default abstract class WebserverModule extends EventEmitter {
      * do it here.
      */
     abstract start(): void;
+    static isWebserverModule(obj: any): obj is WebserverModule;
 }
 export {};

@@ -24,9 +24,9 @@
   },
   "dependencies": {
     "@arcticzeroo/collection": "^1.0.2",
-    "@arcticzeroo/djs-collection": "latest",
     "@types/express": "^4.16.0",
     "@types/mongoose": "^5.3.1",
+    "express": "^4.16.4",
     "frozor-logger": "^3.0.17"
   }
 }
