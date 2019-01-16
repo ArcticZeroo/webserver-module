@@ -22,7 +22,7 @@
     "eslint": "^4.19.1"
   },
   "dependencies": {
-    "@arcticzeroo/collection": "^1.0.2",
+    "@arcticzeroo/collection": "^1.1.0",
     "@types/express": "^4.16.0",
     "@types/mongoose": "^5.3.1",
     "express": "^4.16.4",
